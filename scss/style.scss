@@ -1,0 +1,172 @@
+$main_color:green;
+
+$digit_item_thickness:10px;
+$digit_item_length:30px;
+$digit_item_margin:8px;
+$digit_margin_left:10px;
+
+$digit_w: $digit_item_margin*2 + $digit_item_length;
+$digit_h: $digit_item_margin*3 + $digit_item_length*2;
+
+$digit_all_length: $digit_w*6+$digit_margin_left*3 + 100;
+
+$circle_D: $digit_all_length+100;
+
+@mixin centering-flex{
+  display: -webkit-flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@mixin rotateX($deg){
+  -webkit-transform: rotateX($deg);
+  -ms-transform: rotateX($deg);
+  transform: rotateX($deg);
+}
+@mixin rotateY($deg){
+  -webkit-transform: rotateY($deg);
+  -ms-transform: rotateY($deg);
+  transform: rotateY($deg);
+}
+
+#main-container {
+  @include centering-flex;
+  min-height: 100vh;
+}
+.components-container{
+  position: relative;
+}
+.circle{
+  width: $circle_D;
+  height: $circle_D;
+  position: relative;
+  border-radius: 50%;
+}
+.dialline {
+  position: absolute;
+  width: 2px;
+  height: 16px;
+  background: $main_color;
+  opacity: .8;
+  left: 50%;
+  top:50%;
+  margin-left: -1px;
+  margin-top: -8px;
+  transition: transform .5s;
+}
+.dialline-highlight-h,.dialline-highlight-m{
+  background: linear-gradient(to top, lime 0%, yellow 90%, white 100%);
+  box-shadow: 0 0 10px 6px rgba(255, 255, 0, .5);
+  &::before{
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 100px;
+    margin-top: 16px;
+    background: linear-gradient(to left bottom, lime 40%, white 50%);
+  }
+  &.dialline-hours::before{
+    width: 4px;
+    margin-top: 20px;
+  }
+}
+.dialline-highlight-m::before{
+    height: 200px;
+}
+.dialline-hours{
+  width: 4px;
+  height: 20px;
+  margin-left: -2px;
+  margin-top: -10px;
+  opacity: 1;
+}
+.date-container{
+  position: absolute;
+  top: $circle_D/2 + $digit_h/2+20px;
+  right: ($circle_D - $digit_all_length)/2;
+  color: $main_color;
+  font-family: Andale Mono, monospace;
+  font-size: 1.2em;
+}
+.digit-container{
+  position: absolute;
+  top: $circle_D/2 - $digit_h/2;
+  left: ($circle_D - $digit_all_length)/2;
+}
+.dot{
+  width: $digit_item_thickness;
+  height: $digit_item_thickness;
+  background-color: $main_color;
+  position: absolute;
+  bottom: 0;
+  right: -2*$digit_item_thickness;
+}
+.digit{
+  display: inline-block;
+  position: relative;
+  width: $digit_w;
+  height: $digit_h;
+
+  &:nth-child(1n+2){
+    margin-left: $digit_margin_left;
+  }
+
+  &:nth-child(3),&:nth-child(5){
+    margin-left: 50px;
+  }
+
+  div{
+    position: absolute;
+    background: $main_color;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px black;
+  }
+}
+.digit-item-v{
+  width: $digit_item_thickness;
+  height: $digit_item_length;
+}
+.digit-item-h{
+  width: $digit_item_length;
+  height: $digit_item_thickness;
+  left: $digit_item_margin;
+}
+.digit div{
+  &:nth-child(2){
+    top: $digit_h/2 - $digit_item_thickness/2;
+  }
+
+  &:nth-child(3){
+    bottom: 0;
+  }
+
+  &:nth-child(4){
+    top: $digit_item_margin;
+    right: 0;
+  }
+
+  &:nth-child(5){
+    bottom: $digit_item_margin;
+    right: 0;
+  }
+
+  &:nth-child(6){
+    left: 0;
+    bottom: $digit_item_margin;
+  }
+
+  &:nth-child(7){
+    left: 0;
+    top: $digit_item_margin;
+  }
+}
+.hide-horizontal-enter-active, .hide-horizontal-leave-active,
+.hide-vertical-enter-active, .hide-vertical-leave-active{
+  transition: transform .5s;
+}
+.hide-horizontal-enter, .hide-horizontal-leave-to{
+  @include rotateX(90deg);
+}
+.hide-vertical-enter, .hide-vertical-leave-to{
+  @include rotateY(90deg);
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link href='css/style.css' rel='stylesheet'/>
+</head>
+
+<body>
+  <div id="main-container">
+
+    <div class = 'components-container'>
+
+      <div class="circle-container">
+        <circle-component :time = 'time' :count='count'/>
+      </div>
+
+      <div class="digit-container">
+        <digit v-for='(n,i) in numbers' :digit-value='n' :pos='i'/>
+      </div>
+
+	     <div class='date-container'>
+		    {{(new Date()).toLocaleDateString('ru-RU',
+          {weekday:'long',day:'numeric',month:'long',year:'numeric'})}}
+	     </div>
+
+    </div>
+
+  </div>
+  <script src="https://unpkg.com/vue"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
