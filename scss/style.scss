@@ -28,7 +28,6 @@ $circle_D: $digit_all_length+100;
   -ms-transform: rotateY($deg);
   transform: rotateY($deg);
 }
-
 #main-container {
   @include centering-flex;
   min-height: 100vh;
@@ -54,24 +53,31 @@ $circle_D: $digit_all_length+100;
   margin-top: -8px;
   transition: transform .5s;
 }
-.dialline-highlight-h,.dialline-highlight-m{
-  background: linear-gradient(to top, lime 0%, yellow 90%, white 100%);
-  box-shadow: 0 0 10px 6px rgba(255, 255, 0, .5);
+.dialline-highlight{
   &::before{
     content: '';
     position: absolute;
     width: 2px;
-    height: 100px;
+    height: $circle_D/4;
     margin-top: 16px;
-    background: linear-gradient(to left bottom, lime 40%, white 50%);
+    background: linear-gradient(to left bottom, cyan 30%, white 50%);
+    opacity: .3;
   }
   &.dialline-hours::before{
     width: 4px;
     margin-top: 20px;
   }
 }
+.dialline-highlight-h,.dialline-highlight-m{
+  background: linear-gradient(to top, lime 0%, yellow 90%, white 100%);
+  box-shadow: 0 0 10px 6px rgba(255, 255, 0, .5);
+  &::before{
+    background: linear-gradient(to left bottom, lime 40%, white 50%);
+    opacity: 1;
+  }
+}
 .dialline-highlight-m::before{
-    height: 200px;
+    height: $circle_D/2;
 }
 .dialline-hours{
   width: 4px;

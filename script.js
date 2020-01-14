@@ -36,17 +36,25 @@ Vue.component("circle-component", {
   data: () => ({
     diallines: [],
     itemsInSec: 0,
+
+    randomHighlight:new Set(),
   }),
   mounted() {
     this.itemsInSec = this.count / 60;
     for (let i = 0; i < this.count; i++) {
       this.diallines.push(i);
     }
+    this.setRandomHighlight();
+  },
+  watch:{
+    time(val,oldVal){
+      if(val[1] != oldVal[1]) this.setRandomHighlight();
+    }
   },
   methods: {
     isCurrSecond(val) {
-      return (this.time[2] * this.itemsInSec +
-        Math.floor(this.time[3] * this.itemsInSec / 1000)) == val ? 2 : 1;
+      let currItem = this.time[2] * this.itemsInSec + Math.floor(this.time[3] * this.itemsInSec / 1000);
+      return val == currItem ? 2 : 1;
     },
     isCurrMinute(val) {
       return val == this.time[1] * this.itemsInSec;
@@ -54,11 +62,23 @@ Vue.component("circle-component", {
     isCurrHour(val) {
       let hours = this.time[0] >= 12 ? this.time[0] - 12 : this.time[0];
       return val == hours * (this.count / 12) + Math.round(this.time[1]*(this.count/720));
-    }
+    },
+    setRandomHighlight(){
+      this.randomHighlight.clear();
+      for (var i = 0; i < this.getRandom(this.count-50,this.count); i++) {
+        this.randomHighlight.add(this.getRandom(0,this.count));
+      }
+    },
+    inRandomHighlight(val){
+      return this.randomHighlight.has(val) || this.isCurrHour(val) || this.isCurrMinute(val);
+    },
+    getRandom(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
   },
   template: `<div class = 'circle'>
         <div v-for='d in diallines' class = 'dialline'
-          :class='{"dialline-hours":d%(count/12)==0,"dialline-highlight-h":isCurrHour(d),"dialline-highlight-m":isCurrMinute(d)}'
+          :class='{"dialline-hours":d%(count/12)==0,"dialline-highlight-h":isCurrHour(d),"dialline-highlight-m":isCurrMinute(d),"dialline-highlight":inRandomHighlight(d)}'
           :style='{transform:"rotate(" + (360/count)*d + "deg) translateY(-254px) scale(" + isCurrSecond(d) + ")"}'/>
     </div>`,
 });
@@ -68,7 +88,7 @@ new Vue({
   data: {
     numbers: [],
     time: [],
-    count: 360,
+    count: 120,
   },
   mounted() {;
     setInterval(() => {
